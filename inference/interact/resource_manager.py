@@ -129,7 +129,7 @@ class ResourceManager:
                 # just copy
                 shutil.copy2(path.join(images, image_name), self.image_dir)
             else:
-                frame = cv2.imread(path.join(images, image_name))
+                frame = cv2.imread(path.join(images, image_name), cv2.IMREAD_IGNORE_ORIENTATION | cv2.IMREAD_COLOR)
                 h, w = frame.shape[:2]
                 new_w = (w*self.size//min(w, h))
                 new_h = (h*self.size//min(w, h))
