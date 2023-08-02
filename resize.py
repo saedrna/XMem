@@ -7,6 +7,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Resize mask')
     parser.add_argument('-s', '--source_directory', type=str, required=True, help='Source directory')
     parser.add_argument('-t', '--target_directory', type=str, required=True, help='Target directory')
+    parser.add_argument('-f', '--filename', type=str, default='{file_name}.png', help='filename format, as {file_name}_mask.tif')
     parser.add_argument('-w', '--target_size', type=str, required=True, help='Target size, e.g., (2000, 1000)')
     args = parser.parse_args()
 
@@ -24,7 +25,7 @@ if __name__ == '__main__':
         img = cv2.imread(image_file)
 
         # Resize image
-        img_resized = cv2.resize(img, target_size)
+        img_resized = cv2.resize(img, target_size, interpolation=cv2.INTER_NEAREST)
 
         # Use only red channel
         red_channel = img_resized[:, :, 2]
@@ -35,5 +36,5 @@ if __name__ == '__main__':
         # Save image to new directory
         base_name = os.path.basename(image_file)
         file_name, _ = os.path.splitext(base_name)
-        target_file_path = os.path.join(args.target_directory, f"{file_name}_mask.tif")
+        target_file_path = os.path.join(args.target_directory, args.filename.format(file_name=file_name))
         cv2.imwrite(target_file_path, red_channel)
